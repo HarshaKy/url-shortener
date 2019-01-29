@@ -20,6 +20,8 @@ app.post('/urls', (req, res) => {
     tags: req.body.tags
   });
 
+
+
   url.save().then((doc) => {
     res.send(doc);
   }, (e) => {
@@ -58,13 +60,7 @@ app.get('/urls/:id', (req, res) => {
 // PATCH a URL by ID
 app.patch('/urls/:id', (req, res) => {
   var id = req.params.id;
-  var newTitle = req.body.title;
-  var newOriginalUrl = req.body.originalUrl;
-  var newTags = req.body.tags;
   var body = _.pick(req.body, ['title', 'originalUrl', 'tags']);
-
-  // console.log(newTitle);
-  // console.log(body);
 
   if (!ObjectId.isValid(id)) {
     res.status(404).send('Not valid');
@@ -78,6 +74,25 @@ app.patch('/urls/:id', (req, res) => {
     res.send({url});
   }).catch((e) => console.log('Not valid'));
 });
+
+
+// DELETE a URL by ID
+app.delete('/urls/:id', (req, res) => {
+  var id = req.params.id;
+
+  if (!ObjectId.isValid(id)) {
+    res.status(404).send('Not valid');
+  }
+
+  Url.findByIdAndDelete(id).then((url) => {
+    if (!url) {
+      res.status(404).send();
+    }
+
+    res.send({url});
+  }).catch((e) => console.log('not valid'));
+});
+
 
 app.listen(port, () => {
   console.log('Listening on port ' + port);
