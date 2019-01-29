@@ -61,6 +61,21 @@ app.get('/urls/:id', (req, res) => {
 });
 
 
+// GET URL by hash
+app.get('/urls/hashed/:hash', (req, res) => {
+  var hash = req.params.hash;
+
+  Url.findOne({
+    hashedUrl: hash
+  }).then((url) => {
+    if (!url) {
+      res.status(400).send();
+    }
+
+    res.send({url})
+  }).catch((e) => console.log('not found'));
+})
+
 // PATCH a URL by ID
 app.patch('/urls/:id', (req, res) => {
   var id = req.params.id;
