@@ -21,7 +21,7 @@ var Url = mongoose.model('Url', {
     default: null
   },
   createdAt: {
-    type: Number,
+    type: String,
     default: null
   }
 });

@@ -2,6 +2,7 @@ const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
 const {ObjectId} = require('mongodb');
+const sh = require('shorthash');
 
 var {mongoose} = require('./db/mongoose');
 var {Url} = require('./models/url');
@@ -14,13 +15,16 @@ app.use(bodyParser.json());
 
 // POST a new URL
 app.post('/urls', (req, res) => {
+
+  var hash = sh.unique(req.body.originalUrl);
+
   var url = new Url({
     title: req.body.title,
     originalUrl: req.body.originalUrl,
-    tags: req.body.tags
+    tags: req.body.tags,
+    hashedUrl: hash,
+    createdAt: new Date().toString()
   });
-
-
 
   url.save().then((doc) => {
     res.send(doc);
